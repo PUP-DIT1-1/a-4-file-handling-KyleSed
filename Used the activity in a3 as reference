@@ -1,0 +1,170 @@
+import java.util.*;
+public class a3Villamor {
+    public static void main(String[] args) {
+        String Students[][] = {
+                {"Alfonso", "Jexkean"},
+                {"Arcega", "Russel"},
+                {"Del Coro", "Dwight"},
+                {"Dolotallas", "Christian"},
+                {"Dreu", "Joseph"},
+                {"Esteban", "Enzo"},
+                {"Macabales", "Seanjay"},
+                {"Pacana", "Chester"},
+                {"Padil", "Paul"},
+                {"Talotalo", "John"}
+        };
+        int English[] = new int[Students.length];
+        int Filipino[] = new int[Students.length];
+        int Math[] = new int[Students.length];
+        int Science[] = new int[Students.length];
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the grades of each student first:");
+        for (int i = 0; i < Students.length; i++) {
+            System.out.println("Student: " + Students[i][1] + " " + Students[i][0]);
+            System.out.print("English: ");
+            English[i] = scan.nextInt();
+            System.out.print("Filipino: ");
+            Filipino[i] = scan.nextInt();
+            System.out.print("Math: ");
+            Math[i] = scan.nextInt();
+            System.out.print("Science: ");
+            Science[i] = scan.nextInt();
+        }
+        System.out.println("""
+                Students Grade Collection System
+                Options:
+                1. Search for the grades of the student.
+                2. Search for a student.
+                3. Search of the average of the student.
+                4. Exit
+                Press the number that you've chosen.""");
+        int option = scan.nextInt();
+        if (option == 1) {
+            scan.nextLine();
+            System.out.println("""
+                    Please select a subject:
+                    1. English
+                    2. Filipino
+                    3. Math
+                    4. Science""");
+            int suboption = scan.nextInt();
+            if (suboption == 1) {
+                bubbleSort(English);
+                System.out.println("Student's Grade in English Subject (in ascending order): ");
+                for (int i : English) {
+                    System.out.println(i);
+                }
+            }
+            if (suboption == 2) {
+                BulaAyos(Filipino);
+                System.out.println("Student's Grade in Filipino Subject (in ascending order): ");
+                for (int i : Filipino) {
+                    System.out.println(i);
+                }
+            }
+            if (suboption == 3) {
+                WaterCircleSort(Math);
+                System.out.println("Student's Grade in Math Subject (in ascending order): ");
+                for (int i : Math) {
+                    System.out.println(i);
+                }
+            }
+            if (suboption == 4) {
+                H2OwAirSort(Science);
+                System.out.println("Student's Grade in Science Subject (in ascending order): ");
+                for (int i : Science) {
+                    System.out.println(i);
+                }
+            }
+        }
+        if (option == 2) {
+            scan.nextLine();
+            System.out.println("Enter the student's name: ");
+            String search = scan.nextLine();
+            searchStudent(Students, search);
+        }
+        if (option == 3) {
+            scan.nextLine();
+            System.out.println("Enter the student's name: ");
+            String name = scan.nextLine();
+            boolean found = false;
+            for (int i = 0; i < Students.length; i++) {
+                if (name.equalsIgnoreCase(Students[i][0]) || name.equalsIgnoreCase(Students[i][1])) {
+                    int avg = (Math[i] + English[i] + Science[i] + Filipino[i]) / 4;
+                    System.out.println("Student's name: " + Students[i][1] + " " + Students[i][0]);
+                    System.out.println("Average grade: " + avg);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                System.out.println("Student not found.");
+            }
+        }
+        if (option > 3) {
+            scan.nextLine();
+            System.out.println("Signing off");
+        }
+    }
+            public static void bubbleSort ( int English[]){
+                for (int i = 0; i < English.length - 1; i++) {
+                    for (int j = 0; j < English.length - i - 1; j++) {
+                        if (English[j] > English[j + 1]) {
+                            int temp = English[j];
+                            English[j] = English[j + 1];
+                            English[j + 1] = temp;
+                        }
+                    }
+                }
+            }
+            public static void BulaAyos ( int Filipino[]){
+                for (int i = 0; i < Filipino.length - 1; i++) {
+                    for (int j = 0; j < Filipino.length - i - 1; j++) {
+                        if (Filipino[j] > Filipino[j + 1]) {
+                            int temp = Filipino[j];
+                            Filipino[j] = Filipino[j + 1];
+                            Filipino[j + 1] = temp;
+                        }
+                    }
+                }
+            }
+            public static void WaterCircleSort(int Math[]){
+                for (int i = 0; i < Math.length - 1; i++) {
+                    for (int j = 0; j < Math.length - i - 1; j++) {
+                        if (Math[j] > Math[j + 1]) {
+                            int temp = Math[j];
+                            Math[j] = Math[j + 1];
+                            Math[j + 1] = temp;
+                        }
+                    }
+                }
+            }
+            public static void H2OwAirSort(int Science[]){
+        for (int i = 0; i < Science.length - 1; i++) {
+            for (int j = 0; j < Science.length - i - 1; j++) {
+                if (Science[j] > Science[j + 1]) {
+                    int temp = Science[j];
+                    Science[j] = Science[j + 1];
+                    Science[j + 1] = temp;
+                }
+            }
+        }
+    }
+    public static void searchStudent(String[][] Students, String search) {
+        boolean found = false;
+        for (int i = 0; i < Students.length; i++) {
+            for (int j = 0; j < Students[i].length; j++) {
+
+                if (Students[i][j].equalsIgnoreCase(search)) {
+                    System.out.println("Student Found: " + Students[i][j]);
+                    found = true;
+                    return;
+                }
+
+            }
+        }
+        if (!found) {
+            System.out.println("Student not found.");
+        }
+    }
+    }
