@@ -1,0 +1,152 @@
+import java.io.*;
+import java.util.*;
+public class Main {
+    static final String FILE_NAME = "C:\\Users\\Administrator\\Desktop\\students.csv";
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        ArrayList<String[]> students = new ArrayList<>();
+        ArrayList<int[]> grades = new ArrayList<>();
+        loadFromFile(students, grades);
+        System.out.println("Students Grade Collection System");
+        System.out.println("""
+                Options:
+                1. Add Student Record
+                2. View All Records
+                3. Search Student
+                4. Average of Student
+                5. Exit
+                """);
+        System.out.print("Choose option: ");
+        int option = scan.nextInt();
+        scan.nextLine();
+        switch (option) {
+            case 1:
+                addStudent(scan, students,grades);
+                saveToFile(students,grades);
+                break;
+            case 2:
+                displayAll(students,grades);
+                break;
+            case 3:
+                System.out.print("Enter name: ");
+                String name = scan.nextLine();
+                searchStudent(students, name);
+                break;
+            case 4:
+                System.out.print("Enter name: ");
+                String avgName = scan.nextLine();
+                computeAverage(students,grades,avgName);
+                break;
+            case 5:
+                System.out.println("Exiting...");
+                break;
+            default:
+                System.out.println("Invalid option.");
+        }
+    }
+    public static void addStudent(Scanner scan, ArrayList<String[]> students, ArrayList<int[]> grades) {
+        System.out.print("First Name: ");
+        String first = scan.nextLine();
+        System.out.print("Last Name: ");
+        String last = scan.nextLine();
+        int[] g = new int[4];
+        try {
+            System.out.print("Grades in English: ");
+            g[0] = scan.nextInt();
+            System.out.print("Grades in Filipino: ");
+            g[1] = scan.nextInt();
+            System.out.print("Grades in Math: ");
+            g[2] = scan.nextInt();
+            System.out.print("Grades in Science: ");
+            g[3] = scan.nextInt();
+            scan.nextLine();
+            students.add(new String[]{first, last});
+            grades.add(g);
+            System.out.println("Student added successfully!");
+        } catch (Exception e) {
+            System.out.println("Invalid input. Try again.");
+            scan.nextLine();
+        }
+    }
+    public static void saveToFile(ArrayList<String[]> students, ArrayList<int[]> grades) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            for (int i = 0; i < students.size(); i++) {
+                String[] s = students.get(i);
+                int[] g = grades.get(i);
+                writer.write(s[0] + "," + s[1] + "," +
+                        g[0] + "," + g[1] + "," + g[2] + "," + g[3]);
+                writer.newLine();
+            }
+            System.out.println("Records saved to file.");
+
+        } catch (IOException e) {
+            System.out.println("Error saving file.");
+        }
+    }
+    public static void loadFromFile(ArrayList<String[]> students, ArrayList<int[]> grades) {
+        File file = new File(FILE_NAME);
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                return;
+            }
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data.length == 6) {
+                    students.add(new String[]{data[0], data[1]});
+                    int[] g = new int[4];
+                    for (int i = 0; i < 4; i++) {
+                        g[i] = Integer.parseInt(data[i + 2]);
+                    }
+                    grades.add(g);
+                }
+            }
+            reader.close();
+            if (!students.isEmpty()) {
+                System.out.println("Loaded Records:");
+                displayAll(students, grades);
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading file.");
+        }
+    }
+    public static void displayAll(ArrayList<String[]> students, ArrayList<int[]> grades) {
+        for (int i = 0; i < students.size(); i++) {
+            String[] s = students.get(i);
+            int[] g = grades.get(i);
+            System.out.println("Name: "+ s[0] + " " + s[1]);
+            System.out.println("Grades: " +
+                    " English: " + g[0] +
+                    " Filipino: " + g[1] +
+                    " Math: " + g[2] +
+                    " Science: " + g[3]);
+        }
+    }
+    public static void searchStudent(ArrayList<String[]> students, String name) {
+        boolean found = false;
+        for (String[] s : students) {
+            if (s[0].equalsIgnoreCase(name) || s[1].equalsIgnoreCase(name)) {
+                System.out.println("Found: " + s[0] + " " + s[1]);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Student not found.");
+        }
+    }
+    public static void computeAverage(ArrayList<String[]> students, ArrayList<int[]> grades, String name) {
+        for (int i = 0; i < students.size(); i++) {
+            String[] s = students.get(i);
+            if (s[0].equalsIgnoreCase(name) || s[1].equalsIgnoreCase(name)) {
+                int[] g = grades.get(i);
+                int avg = ((g[0] + g[1] + g[2] + g[3]) / 4);
+                System.out.println("Student's name: " + s[0] + " " + s[1]);
+                System.out.println("Average: " + avg);
+                return;
+            }
+        }
+        System.out.println("Student not found.");
+    }
+}
